@@ -18,7 +18,6 @@ public class main {
         testPerc.open(1, 2);
         testPerc.open(0, 1);
         testPerc.open(2, 2);
-        System.out.println(testPerc.isOpen(2, 2));
         StdOut.println(testPerc.numberOfOpenSites());
     }
 }

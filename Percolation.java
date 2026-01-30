@@ -30,7 +30,7 @@ public class Percolation {
         }
         // increment num open sites
         numberOfOpenSites++;
-        int openSiteValue = getUnionValue(row, 0, col, 0);
+        int openSiteValue = getUnionValue(row, col);
         // connect to all adjacent open sites
         for (int[] dir : directions) {
 
@@ -40,44 +40,16 @@ public class Percolation {
             if (newRow >= 0 && newRow < arraySize && newCol >= 0 && newCol < arraySize
                     && percolationArray[newRow][newCol] == 1) {
 
-                percolationUnionArray.union(openSiteValue, getUnionValue(row, dir[0], col, dir[1]));
+                percolationUnionArray.union(openSiteValue, getUnionValue(newRow, newCol));
             }
         }
-        // if ((row - 1) >= 0 && percolationArray[row - 1][col] == 1) {
-        //     System.out.printf("First is %d%n", getUnionValue(row, 0, col, 0));
-        //     System.out.printf("Second is %d%n", getUnionValue(row, -1, col, 0));
-        //     percolationUnionArray.union(getUnionValue(row, 0, col, 0),
-        //                                 getUnionValue(row, -1, col, 0));
-        //     System.out.printf("Row %d col %d is open and adj%n", (row - 1), col);
-        //     System.out.println(percolationUnionArray.find(4) == percolationUnionArray.find(1));
-        // }
-        // if ((row + 1) < arraySize && percolationArray[row + 1][col] == 1) {
-        //     System.out.printf("First is %d%n", getUnionValue(row, 0, col, 0));
-        //     System.out.printf("Second is %d%n", getUnionValue(row, 1, col, 0));
-        //     percolationUnionArray.union(getUnionValue(row, 0, col, 0),
-        //                                 getUnionValue(row, 1, col, 0));
-        //     System.out.printf("Row %d col %d is open and adj%n", (row + 1), col);
-        // }
-        // if ((col - 1) >= 0 && percolationArray[row][col - 1] == 1) {
-        //     System.out.printf("First is %d%n", getUnionValue(row, 0, col, 0));
-        //     System.out.printf("Second is %d%n", getUnionValue(row, 0, col, -1));
-        //     percolationUnionArray.union(getUnionValue(row, 0, col, 0),
-        //                                 getUnionValue(row, 0, col, -1));
-        //     System.out.printf("Row %d col %d is open and adj%n", row, (col - 1));
-        // }
-        // if ((col + 1) < arraySize && percolationArray[row][col + 1] == 1) {
-        //     System.out.printf("First is %d%n", getUnionValue(row, 0, col, 0));
-        //     System.out.printf("Second is %d%n", getUnionValue(row, 0, col, 1));
-        //     percolationUnionArray.union(getUnionValue(row, 0, col, 0),
-        //                                 getUnionValue(row, 0, col, 1));
-        //     System.out.printf("Row %d col %d is open and adj%n", (row), (col + 1));
-        // }
+
         System.out.printf("The are connected: %b%n",
                           percolationUnionArray.find(8) == percolationUnionArray.find(0));
     }
 
-    private int getUnionValue(int row, int rowX, int col, int colX) {
-        return (row + rowX) * 3 + (col + colX);
+    private int getUnionValue(int row, int col) {
+        return row * arraySize + col;  // i think something is fishy here
     }
 
     // is the site (row, col) open?

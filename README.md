@@ -47,6 +47,7 @@ Percolation HW
 ✅ TODO Wednesday - create main and start on percolation data type
 create main to take in two command line args
 
-TODO Friday - continue implementing the percolation data type
+✅ TODO Friday - continue implementing the percolation data type
+TODO Monday - finish cleaning up open code (fix bug - maybe fixed, do more tests); add the virtual spots; finish the data type
 implement the percolation data type
 implement the stats
