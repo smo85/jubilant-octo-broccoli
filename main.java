@@ -14,10 +14,13 @@ public class main {
         System.out.println(testPerc.getPercolationArray().length);
         System.out.println(testPerc.isOpen(2, 2));
         testPerc.open(0, 0);
+        testPerc.open(2, 1);
         testPerc.open(1, 1);
         testPerc.open(1, 2);
         testPerc.open(0, 1);
-        testPerc.open(2, 2);
-        StdOut.println(testPerc.numberOfOpenSites());
+        // testPerc.open(2, 3);
+        // testPerc.open(2, 4);
+        StdOut.println(testPerc.isFull(0, 2));
+        StdOut.println(testPerc.percolates());
     }
 }
