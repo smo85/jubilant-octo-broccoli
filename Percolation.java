@@ -14,6 +14,7 @@ public class Percolation {
     private int bottomVirtualSite;
 
     private WeightedQuickUnionUF percolationUnionArray;
+    private WeightedQuickUnionUF percolationFullnessArray;
 
     // creates n-by-n grid, with all sites initially blocked
     public Percolation(int n) {
@@ -22,6 +23,7 @@ public class Percolation {
         }
         setPercolationArray(new boolean[n][n]);
         percolationUnionArray = new WeightedQuickUnionUF(n * n + 2);
+        percolationFullnessArray = new WeightedQuickUnionUF(n * n + 1);
 
         nSize = n;
         bottomVirtualSite = n * n + 1;
@@ -42,6 +44,7 @@ public class Percolation {
             // connect to virtual site
             if (r == 0) {
                 percolationUnionArray.union(openSiteValue, 0);
+                percolationFullnessArray.union(openSiteValue, 0);
             }
             if (r == (nSize - 1)) {
                 percolationUnionArray.union(openSiteValue, bottomVirtualSite);
@@ -60,6 +63,7 @@ public class Percolation {
                         && percolationArray[newRow][newCol]) {
 
                     percolationUnionArray.union(openSiteValue, getUnionValue(newRow, newCol));
+                    percolationFullnessArray.union(openSiteValue, getUnionValue(newRow, newCol));
                 }
             }
         }
@@ -84,7 +88,8 @@ public class Percolation {
         int c = col - 1;
         if (isOpen(row, col)) {
             int unionFindValue = getUnionValue(r, c);
-            return percolationUnionArray.find(unionFindValue) == percolationUnionArray.find(0);
+            return percolationFullnessArray.find(unionFindValue) == percolationFullnessArray.find(
+                    0);
         }
         return false;
     }
@@ -104,11 +109,7 @@ public class Percolation {
 
     }
 
-    public boolean[][] getPercolationArray() {
-        return percolationArray;
-    }
-
-    public void setPercolationArray(boolean[][] percolationArray) {
+    private void setPercolationArray(boolean[][] percolationArray) {
         this.percolationArray = percolationArray;
     }
 
