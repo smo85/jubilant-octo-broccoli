@@ -7,11 +7,11 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private static int[][] directions = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
-    private int[][] percolationArray;
+    private static final int[][] DIRECTIONS = { { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 } };
+    private boolean[][] percolationArray;
     private int numberOfOpenSites = 0;
-    private int nSize = 0;
-    private int bottomVirtualSite = 0;
+    private int nSize;
+    private int bottomVirtualSite;
 
     private WeightedQuickUnionUF percolationUnionArray;
 
@@ -20,7 +20,7 @@ public class Percolation {
         if (n <= 0) {
             throw new IllegalArgumentException("n must be greater than 0");
         }
-        setPercolationArray(new int[n][n]);
+        setPercolationArray(new boolean[n][n]);
         percolationUnionArray = new WeightedQuickUnionUF(n * n + 2);
 
         nSize = n;
@@ -30,18 +30,20 @@ public class Percolation {
     // opens the site (row, col) if it is not open already
     public void open(int row, int col) {
         checkBounds(row, col);
+        int r = row - 1;
+        int c = col - 1;
         // check if open already
-        if (percolationArray[row][col] != 1) {
+        if (!percolationArray[r][c]) {
             // open
-            percolationArray[row][col] = 1;
+            percolationArray[r][c] = true;
 
-            int openSiteValue = getUnionValue(row, col);
+            int openSiteValue = getUnionValue(r, c);
             // StdOut.printf("open site: %d%n", openSiteValue);
             // connect to virtual site
-            if (row == 0) {
+            if (r == 0) {
                 percolationUnionArray.union(openSiteValue, 0);
             }
-            if (row == (nSize - 1)) {
+            if (r == (nSize - 1)) {
                 percolationUnionArray.union(openSiteValue, bottomVirtualSite);
             }
 
@@ -49,13 +51,13 @@ public class Percolation {
             numberOfOpenSites++;
 
             // connect to all adjacent open sites
-            for (int[] dir : directions) {
+            for (int[] dir : DIRECTIONS) {
 
-                int newRow = row + dir[0];
-                int newCol = col + dir[1];
+                int newRow = r + dir[0];
+                int newCol = c + dir[1];
 
                 if (newRow >= 0 && newRow < nSize && newCol >= 0 && newCol < nSize
-                        && percolationArray[newRow][newCol] == 1) {
+                        && percolationArray[newRow][newCol]) {
 
                     percolationUnionArray.union(openSiteValue, getUnionValue(newRow, newCol));
                 }
@@ -70,14 +72,18 @@ public class Percolation {
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
         checkBounds(row, col);
-        return percolationArray[row][col] == 1;
+        int r = row - 1;
+        int c = col - 1;
+        return percolationArray[r][c];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         checkBounds(row, col);
+        int r = row - 1;
+        int c = col - 1;
         if (isOpen(row, col)) {
-            int unionFindValue = getUnionValue(row, col);
+            int unionFindValue = getUnionValue(r, c);
             return percolationUnionArray.find(unionFindValue) == percolationUnionArray.find(0);
         }
         return false;
@@ -98,16 +104,16 @@ public class Percolation {
 
     }
 
-    public int[][] getPercolationArray() {
+    public boolean[][] getPercolationArray() {
         return percolationArray;
     }
 
-    public void setPercolationArray(int[][] percolationArray) {
+    public void setPercolationArray(boolean[][] percolationArray) {
         this.percolationArray = percolationArray;
     }
 
     private void checkBounds(int row, int col) {
-        if (row < 0 || row >= nSize || col < 0 || col >= nSize) {
+        if (row < 1 || row > nSize || col < 1 || col > nSize) {
             throw new IllegalArgumentException("row or col must be within range");
         }
     }
