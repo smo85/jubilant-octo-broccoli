@@ -21,6 +21,5 @@ public class RandomWorld {
             }
         }
         StdOut.println(champion);
-
     }
 }
